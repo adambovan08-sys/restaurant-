@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Piváreň Predná Hora Humenné</title>
+  <meta name="description" content="Piváreň Predná Hora Humenné – pivo Predná Hora, pizza, burgre, obedové menu a príjemné posedenie v Humennom." />
+  <meta name="keywords" content="Piváreň Predná Hora Humenné, pizza Humenné, burgre Humenné, pivo Predná Hora, obedové menu Humenné" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" content="Piváreň Predná Hora Humenné" />
+  <meta property="og:description" content="Pivo, pizza, burgre a domáca kuchyňa v príjemnej pivárenskej atmosfére." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="sk_SK" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #080604;
+      color: #fff7ed;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 10%, rgba(245, 158, 11, 0.22), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(120, 53, 15, 0.32), transparent 34%),
+        radial-gradient(circle at 50% 95%, rgba(217, 119, 6, 0.16), transparent 34%);
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    .texture {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 42px 42px;
+      opacity: 0.3;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding: 18px 7%;
+      background: rgba(8, 6, 4, 0.78);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(251, 191, 36, 0.16);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 950;
+      letter-spacing: -0.4px;
+      font-size: 21px;
+    }
+
+    .logo-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #f59e0b, #92400e);
+      box-shadow: 0 16px 40px rgba(245,158,11,0.24);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: #fed7aa;
+      text-decoration: none;
+      padding: 10px 13px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 800;
+      transition: 0.25s ease;
+    }
+
+    nav a:hover {
+      background: rgba(245,158,11,0.13);
+      color: white;
+    }
+
+    .nav-cta {
+      border: 1px solid rgba(245,158,11,0.34);
+      background: rgba(245,158,11,0.12);
+    }
+
+    .hero {
+      min-height: 86vh;
+      padding: 96px 7% 76px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 58px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 22px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(245,158,11,0.13);
+      color: #fde68a;
+      border: 1px solid rgba(245,158,11,0.25);
+      font-weight: 900;
+      animation: floatIn 0.7s ease both;
+    }
+
+    .hero h1 {
+      font-size: clamp(46px, 7vw, 86px);
+      line-height: 0.92;
+      letter-spacing: -3.5px;
+      margin-bottom: 24px;
+      animation: floatIn 0.85s ease both;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #fbbf24, #fb923c, #fff7ed);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      color: #fed7aa;
+      max-width: 620px;
+      font-size: 20px;
+      line-height: 1.75;
+      margin-bottom: 34px;
+      animation: floatIn 1s ease both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      animation: floatIn 1.1s ease both;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 15px 24px;
+      font-weight: 950;
+      font-size: 15px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: 0.25s ease;
+    }
+
+    .btn-primary {
+      color: #1c1005;
+      background: linear-gradient(135deg, #fbbf24, #fb923c);
+      box-shadow: 0 20px 48px rgba(245,158,11,0.28);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 26px 60px rgba(245,158,11,0.36);
+    }
+
+    .btn-secondary {
+      color: white;
+      border: 1px solid rgba(251,191,36,0.22);
+      background: rgba(255,255,255,0.055);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.095);
+      transform: translateY(-4px);
+    }
+
+    .hero-card {
+      position: relative;
+      min-height: 470px;
+      border-radius: 38px;
+      padding: 28px;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(120,53,15,0.52), rgba(28,17,8,0.76)),
+        radial-gradient(circle at 50% 18%, rgba(251,191,36,0.34), transparent 36%);
+      border: 1px solid rgba(251,191,36,0.18);
+      box-shadow: 0 34px 90px rgba(0,0,0,0.36);
+      animation: heroCard 1s ease both;
+    }
+
+    .beer-visual {
+      height: 100%;
+      min-height: 420px;
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .beer-glass {
+      width: 190px;
+      height: 300px;
+      border-radius: 22px 22px 34px 34px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06) 18%, rgba(217,119,6,0.92) 30%, rgba(245,158,11,0.98) 75%, rgba(255,255,255,0.16));
+      border: 5px solid rgba(255,247,237,0.5);
+      box-shadow: inset -20px 0 40px rgba(120,53,15,0.28), 0 36px 70px rgba(0,0,0,0.32);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .beer-glass::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 70px;
+      background: radial-gradient(circle at 20% 30%, #fff7ed 0 18%, transparent 19%), radial-gradient(circle at 50% 18%, #fffbeb 0 22%, transparent 23%), radial-gradient(circle at 80% 35%, #fff7ed 0 18%, transparent 19%), linear-gradient(#fffbeb, #fde68a);
+      border-radius: 14px 14px 40px 40px;
+    }
+
+    .beer-glass::after {
+      content: "";
+      position: absolute;
+      width: 84px;
+      height: 140px;
+      right: -66px;
+      top: 92px;
+      border: 18px solid rgba(255,247,237,0.48);
+      border-left: none;
+      border-radius: 0 45px 45px 0;
+    }
+
+    .bubble {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: rgba(255,247,237,0.7);
+      border-radius: 50%;
+      animation: bubble 4s ease-in-out infinite;
+    }
+
+    .b1 { left: 48%; bottom: 100px; animation-delay: 0s; }
+    .b2 { left: 55%; bottom: 130px; animation-delay: 0.8s; }
+    .b3 { left: 44%; bottom: 160px; animation-delay: 1.5s; }
+
+    .floating-card {
+      position: absolute;
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: rgba(8,6,4,0.72);
+      border: 1px solid rgba(251,191,36,0.18);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.28);
+    }
+
+    .floating-card strong {
+      display: block;
+      font-size: 22px;
+      color: white;
+    }
+
+    .floating-card span {
+      color: #fed7aa;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .fc-one { left: 18px; top: 34px; }
+    .fc-two { right: 24px; bottom: 36px; }
+
+    section { padding: 82px 7%; }
+
+    .section-head {
+      max-width: 780px;
+      margin: 0 auto 44px;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: clamp(34px, 4.5vw, 56px);
+      letter-spacing: -2px;
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      color: #fed7aa;
+      line-height: 1.7;
+      font-size: 18px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .card {
+      position: relative;
+      padding: 26px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(41,26,13,0.8), rgba(20,12,6,0.72));
+      border: 1px solid rgba(251,191,36,0.16);
+      box-shadow: 0 24px 70px rgba(0,0,0,0.24);
+      transition: 0.28s ease;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      border-color: rgba(251,191,36,0.42);
+      box-shadow: 0 32px 80px rgba(245,158,11,0.16);
+    }
+
+    .card-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      font-size: 32px;
+      margin-bottom: 22px;
+      background: linear-gradient(135deg, rgba(245,158,11,0.26), rgba(120,53,15,0.38));
+      border: 1px solid rgba(251,191,36,0.18);
+    }
+
+    .card h3 {
+      font-size: 24px;
+      margin-bottom: 12px;
+      letter-spacing: -0.6px;
+    }
+
+    .card p {
+      color: #fed7aa;
+      line-height: 1.65;
+    }
+
+    .menu-list {
+      max-width: 980px;
+      margin: auto;
+      display: grid;
+      gap: 16px;
+    }
+
+    .menu-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: center;
+      padding: 22px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.052);
+      border: 1px solid rgba(251,191,36,0.14);
+      transition: 0.25s ease;
+    }
+
+    .menu-item:hover {
+      background: rgba(245,158,11,0.09);
+      transform: translateX(4px);
+    }
+
+    .menu-item h3 {
+      font-size: 21px;
+      margin-bottom: 8px;
+    }
+
+    .menu-item p {
+      color: #fed7aa;
+      line-height: 1.55;
+    }
+
+    .menu-price {
+      font-size: 22px;
+      font-weight: 950;
+      color: #fbbf24;
+      white-space: nowrap;
+    }
+
+    .hours-contact {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 1050px;
+      margin: auto;
+    }
+
+    .info-box {
+      padding: 30px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(41,26,13,0.78), rgba(20,12,6,0.72));
+      border: 1px solid rgba(251,191,36,0.16);
+      box-shadow: 0 24px 70px rgba(0,0,0,0.24);
+    }
+
+    .info-box h3 {
+      font-size: 28px;
+      margin-bottom: 18px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 13px 0;
+      border-bottom: 1px solid rgba(251,191,36,0.1);
+      color: #ffedd5;
+    }
+
+    .info-row strong { color: white; }
+
+    .socials {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .socials a {
+      color: #1c1005;
+      background: linear-gradient(135deg, #fbbf24, #fb923c);
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-weight: 950;
+      transition: 0.25s ease;
+    }
+
+    .socials a:hover { transform: translateY(-3px); }
+
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .review {
+      padding: 24px;
+      border-radius: 26px;
+      background: rgba(255,255,255,0.055);
+      border: 1px solid rgba(251,191,36,0.14);
+    }
+
+    .stars {
+      color: #fbbf24;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+    }
+
+    .review p {
+      color: #fed7aa;
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    .review strong { color: white; }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr 1fr;
+      gap: 18px;
+    }
+
+    .gallery-tile {
+      min-height: 220px;
+      border-radius: 28px;
+      background:
+        linear-gradient(135deg, rgba(245,158,11,0.24), rgba(120,53,15,0.36)),
+        radial-gradient(circle at 50% 25%, rgba(255,247,237,0.2), transparent 32%);
+      border: 1px solid rgba(251,191,36,0.15);
+      display: grid;
+      place-items: center;
+      font-size: 54px;
+      box-shadow: 0 22px 60px rgba(0,0,0,0.22);
+      transition: 0.28s ease;
+    }
+
+    .gallery-tile:hover {
+      transform: scale(1.025);
+      border-color: rgba(251,191,36,0.38);
+    }
+
+    .gallery-tile.large { min-height: 320px; }
+
+    footer {
+      padding: 34px 7%;
+      border-top: 1px solid rgba(251,191,36,0.12);
+      color: #fed7aa;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: 0.68s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes heroCard {
+      from { opacity: 0; transform: translateX(34px) scale(0.98); }
+      to { opacity: 1; transform: translateX(0) scale(1); }
+    }
+
+    @keyframes bubble {
+      0%, 100% { transform: translateY(0); opacity: 0.45; }
+      50% { transform: translateY(-80px); opacity: 0.9; }
+    }
+
+    @media (max-width: 980px) {
+      .hero, .hours-contact { grid-template-columns: 1fr; }
+      .cards-grid, .review-grid, .gallery { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 700px) {
+      header { align-items: flex-start; flex-direction: column; }
+      nav { width: 100%; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+      .hero { padding: 66px 6% 56px; }
+      section { padding: 60px 6%; }
+      .cards-grid, .review-grid, .gallery { grid-template-columns: 1fr; }
+      .menu-item { grid-template-columns: 1fr; }
+      .beer-visual { min-height: 340px; }
+      .beer-glass { width: 150px; height: 240px; }
+      footer { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="texture"></div>
+
+  <header>
+    <div class="logo">
+      <div class="logo-badge">PH</div>
+      <span>Piváreň Predná Hora</span>
+    </div>
+    <nav>
+      <a href="#menu">Menu</a>
+      <a href="#about">O nás</a>
+      <a href="#hours">Otváracie hodiny</a>
+      <a href="#reviews">Recenzie</a>
+      <a href="#contact" class="nav-cta">Kontakt</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">🍺 Pivo • Pizza • Burgre • Domáca kuchyňa</div>
+        <h1>Piváreň s chuťou <span>Prednej Hory.</span></h1>
+        <p>Príjemné miesto v Humennom pre poctivé jedlo, dobré pivo, obedové menu a posedenie s priateľmi. Tradičné recepty, pizza, burgre a pivárenská atmosféra.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#menu">Pozrieť menu</a>
+          <a class="btn btn-secondary" href="tel:+421911299111">Zavolať</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="beer-visual">
+          <div class="floating-card fc-one"><strong>09:30</strong><span>otvorené počas týždňa</span></div>
+          <div class="beer-glass"></div>
+          <div class="bubble b1"></div>
+          <div class="bubble b2"></div>
+          <div class="bubble b3"></div>
+          <div class="floating-card fc-two"><strong>Pizza</strong><span>burgre & pivo</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="section-head fade-up">
+        <h2 class="section-title">Chuť domova na vašom tanieri</h2>
+        <p class="section-subtitle">Piváreň Predná Hora Humenné spája jedinečné pivo Predná Hora, tradičné jedlá, pizzu, burgre a príjemné posedenie s terasou.</p>
+      </div>
+
+      <div class="cards-grid">
+        <div class="card fade-up">
+          <div class="card-icon">🍺</div>
+          <h3>Jedinečné pivo</h3>
+          <p>Miesto pre milovníkov čapovaného piva, pivárenskej atmosféry a pohodového večera s priateľmi.</p>
+        </div>
+        <div class="card fade-up">
+          <div class="card-icon">🍕</div>
+          <h3>Pizza & burgre</h3>
+          <p>Obľúbená kombinácia pivárenských jedál, pizze, burgrov a chuťoviek k pivu.</p>
+        </div>
+        <div class="card fade-up">
+          <div class="card-icon">🌿</div>
+          <h3>Terasa a posedenie</h3>
+          <p>Príjemné prostredie na obed, stretnutie, večeru alebo posedenie po práci.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="menu">
+      <div class="section-head fade-up">
+        <h2 class="section-title">Výber z ponuky</h2>
+        <p class="section-subtitle">Ukážkový moderný prehľad jedál a nápojov. Ceny a položky môžeš neskôr napojiť na Google Sheets rovnako ako pri e-shope.</p>
+      </div>
+
+      <div class="menu-list fade-up">
+        <div class="menu-item">
+          <div><h3>Pizza Predná Hora</h3><p>Domáca pizza s bohatou oblohou, syrom a pivárenským charakterom.</p></div>
+          <div class="menu-price">od 7,90 €</div>
+        </div>
+        <div class="menu-item">
+          <div><h3>HC Burger</h3><p>Šťavnatý burger so steakovými hranolkami, vhodný k pivu aj večernému posedeniu.</p></div>
+          <div class="menu-price">od 8,90 €</div>
+        </div>
+        <div class="menu-item">
+          <div><h3>Bravčový rezeň v panko strúhanke</h3><p>Klasika obedového menu so zemiakovou kašou.</p></div>
+          <div class="menu-price">menu</div>
+        </div>
+        <div class="menu-item">
+          <div><h3>Kuracia pečienka</h3><p>Domáce jedlo s ryžou a kyslou uhorkou.</p></div>
+          <div class="menu-price">menu</div>
+        </div>
+        <div class="menu-item">
+          <div><h3>Čapované pivo Predná Hora</h3><p>Čerstvo načapované pivo s dôrazom na správny pohár, ťah a penu.</p></div>
+          <div class="menu-price">🍺</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head fade-up">
+        <h2 class="section-title">Atmosféra podniku</h2>
+        <p class="section-subtitle">Moderná galéria pripravená na skutočné fotografie interiéru, jedla, piva a terasy.</p>
+      </div>
+      <div class="gallery fade-up">
+        <div class="gallery-tile large">🍻</div>
+        <div class="gallery-tile">🍕</div>
+        <div class="gallery-tile large">🍔</div>
+        <div class="gallery-tile">☀️</div>
+        <div class="gallery-tile">🥘</div>
+      </div>
+    </section>
+
+    <section id="hours">
+      <div class="section-head fade-up">
+        <h2 class="section-title">Otváracie hodiny a kontakt</h2>
+        <p class="section-subtitle">Všetko dôležité na jednom mieste: telefón, adresa, sociálne siete a hodiny otvorenia.</p>
+      </div>
+
+      <div class="hours-contact">
+        <div class="info-box fade-up">
+          <h3>Otváracie hodiny</h3>
+          <div class="info-row"><span>Pondelok</span><strong>09:30 – 23:00</strong></div>
+          <div class="info-row"><span>Utorok</span><strong>09:30 – 23:00</strong></div>
+          <div class="info-row"><span>Streda</span><strong>09:30 – 23:00</strong></div>
+          <div class="info-row"><span>Štvrtok</span><strong>09:30 – 23:00</strong></div>
+          <div class="info-row"><span>Piatok</span><strong>09:30 – 00:30</strong></div>
+          <div class="info-row"><span>Sobota</span><strong>11:00 – 00:30</strong></div>
+          <div class="info-row"><span>Nedeľa</span><strong>11:00 – 22:30</strong></div>
+        </div>
+
+        <div class="info-box fade-up" id="contact">
+          <h3>Kontakt</h3>
+          <div class="info-row"><span>Telefón</span><strong><a href="tel:+421911299111" style="color:white;text-decoration:none;">+421 911 299 111</a></strong></div>
+          <div class="info-row"><span>Adresa</span><strong>Ševčenkova 1, Humenné</strong></div>
+          <div class="info-row"><span>Podnik</span><strong>Piváreň Predná Hora</strong></div>
+          <div class="socials">
+            <a href="https://www.facebook.com/p/Piv%C3%A1re%C5%88-Predn%C3%A1-Hora-Humenn%C3%A9-100041946254993/" target="_blank" rel="noopener">Facebook</a>
+            <a href="https://www.instagram.com/pivaren_prednahora_humenne/" target="_blank" rel="noopener">Instagram</a>
+            <a href="https://www.mojeqr.sk/predna_hora" target="_blank" rel="noopener">Online menu</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews">
+      <div class="section-head fade-up">
+        <h2 class="section-title">Čo hovoria hostia</h2>
+        <p class="section-subtitle">Výber hodnotení inšpirovaný verejnými recenziami a spätnou väzbou hostí.</p>
+      </div>
+      <div class="review-grid">
+        <div class="review fade-up"><div class="stars">★★★★★</div><p>„Všetko bolo perfektné, veľmi dobrá pizza.“</p><strong>Hosť podniku</strong></div>
+        <div class="review fade-up"><div class="stars">★★★★★</div><p>„Super pizza a pivo, príjemný personál.“</p><strong>Hosť podniku</strong></div>
+        <div class="review fade-up"><div class="stars">★★★★★</div><p>„Veľmi spokojný. Prídem aj nabudúce.“</p><strong>Hosť podniku</strong></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 Piváreň Predná Hora Humenné</p>
+    <p>Moderný web koncept · Pivo · Pizza · Burgre · Obedové menu</p>
+  </footer>
+
+  <script>
+    function initScrollAnimations() {
+      const elements = document.querySelectorAll('.fade-up');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      }, { threshold: 0.12 });
+      elements.forEach(element => observer.observe(element));
+    }
+
+    document.addEventListener('DOMContentLoaded', initScrollAnimations);
+  </script>
+</body>
+</html>
