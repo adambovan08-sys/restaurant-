@@ -200,10 +200,11 @@
           <form id="reservationForm">
             <div class="form-grid">
               <div><label>Dátum</label><input type="date" id="resDate" required></div>
-              <div><label>Čas</label><select id="resTime" required><option value="12:00">12:00</option><option value="13:00">13:00</option><option value="14:00">14:00</option><option value="17:00">17:00</option><option value="18:00">18:00</option><option value="19:00">19:00</option><option value="20:00">20:00</option><option value="21:00">21:00</option></select></div>
+              <div><label>Čas príchodu</label><select id="resTime" required></select></div>
             </div>
             <div class="form-grid" style="margin-top:14px;"><div><label>Meno</label><input type="text" id="resName" placeholder="Meno a priezvisko" required></div><div><label>Telefón</label><input type="tel" id="resPhone" placeholder="+421 ..." required></div></div>
-            <div class="form-grid" style="margin-top:14px;"><div><label>Počet osôb</label><input type="number" id="resPeople" min="1" max="12" value="2" required></div><div><label>Vybraný stôl</label><input type="text" id="selectedTableDisplay" placeholder="Klikni na stôl" readonly required></div></div>
+            <div class="form-grid" style="margin-top:14px;"><div><label>Počet osôb</label><input type="number" id="resPeople" min="1" max="12" value="2" required></div><div><label>Vybraný stôl</label><input type="text" id="selectedTableDisplay" placeholder="Klikni na stôl" readonly required></div>
+              <div><label>Rezervácia do</label><input type="text" id="resEndTimeDisplay" placeholder="Automaticky" readonly></div></div>
             <div style="margin-top:14px;"><label>Poznámka</label><textarea id="resNote" placeholder="Napr. kočík, narodeniny, preferencia pri okne..."></textarea></div>
             <button class="btn btn-primary" type="submit" id="reserveBtn" style="margin-top:18px; width:100%;">Odoslať rezerváciu</button>
             <div class="success" id="reservationSuccess"></div>
@@ -243,8 +244,21 @@
     ];
 
     const fallbackHours = [
-      { day: 'Pondelok – Štvrtok', hours: '09:30 – 23:00' }, { day: 'Piatok', hours: '09:30 – 00:30' }, { day: 'Sobota', hours: '11:00 – 00:30' }, { day: 'Nedeľa', hours: '11:00 – 22:30' }
+      { day: 'Pondelok – Štvrtok', hours: '09:30 – 23:00' },
+      { day: 'Piatok', hours: '09:30 – 00:30' },
+      { day: 'Sobota', hours: '11:00 – 00:30' },
+      { day: 'Nedeľa', hours: '11:00 – 22:30' }
     ];
+
+    const openingSchedule = {
+      0: { open: '11:00', close: '22:30' },
+      1: { open: '09:30', close: '23:00' },
+      2: { open: '09:30', close: '23:00' },
+      3: { open: '09:30', close: '23:00' },
+      4: { open: '09:30', close: '23:00' },
+      5: { open: '09:30', close: '00:30' },
+      6: { open: '11:00', close: '00:30' }
+    };
 
     const fallbackReviews = [
       { name: 'Hosť podniku', rating: 5, review: 'Výborná pizza, dobré pivo a veľmi príjemná atmosféra.' },
@@ -304,8 +318,58 @@
       if (allReviews.length > 6) { btn.style.display = 'inline-flex'; btn.textContent = reviewsExpanded ? 'Skryť recenzie' : 'Zobraziť viac recenzií'; } else btn.style.display = 'none';
     }
 
+    function timeToMinutes(time) {
+      const parts = time.split(':').map(Number);
+      return parts[0] * 60 + parts[1];
+    }
+
+    function minutesToTime(minutes) {
+      minutes = ((minutes % 1440) + 1440) % 1440;
+      const h = Math.floor(minutes / 60);
+      const m = minutes % 60;
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    }
+
+    function getScheduleForSelectedDate() {
+      const dateValue = document.getElementById('resDate').value;
+      if (!dateValue) return openingSchedule[1];
+      const date = new Date(dateValue + 'T12:00:00');
+      return openingSchedule[date.getDay()] || openingSchedule[1];
+    }
+
+    function getReservationEndTime(startTime) {
+      return minutesToTime(timeToMinutes(startTime) + 120);
+    }
+
+    function updateEndTimeDisplay() {
+      const startTime = document.getElementById('resTime').value;
+      document.getElementById('resEndTimeDisplay').value = startTime ? getReservationEndTime(startTime) : '';
+    }
+
+    function populateReservationTimes() {
+      const select = document.getElementById('resTime');
+      const schedule = getScheduleForSelectedDate();
+      let open = timeToMinutes(schedule.open);
+      let close = timeToMinutes(schedule.close);
+
+      if (close <= open) close += 1440;
+
+      const lastStart = close - 120;
+      select.innerHTML = '';
+
+      for (let t = open; t <= lastStart; t += 30) {
+        const value = minutesToTime(t);
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = `${value} – ${getReservationEndTime(value)}`;
+        select.appendChild(option);
+      }
+
+      updateEndTimeDisplay();
+    }
+
     async function loadAvailability() {
-      const date = document.getElementById('resDate').value; const time = document.getElementById('resTime').value;
+      const date = document.getElementById('resDate').value; const time = document.getElementById('resTime').value; updateEndTimeDisplay();
       if (!date || !time) { renderTables(allTables.length ? allTables : generateFallbackTables()); return; }
       try { const response = await fetch(`${scriptUrl}?action=availability&date=${encodeURIComponent(date)}&time=${encodeURIComponent(time)}&v=${Date.now()}`); const data = await response.json(); allTables = data.tables && data.tables.length ? data.tables : allTables; renderTables(allTables); }
       catch (e) { renderTables(allTables); }
@@ -323,13 +387,13 @@
     }
 
     document.getElementById('toggleReviewsBtn').addEventListener('click', () => { reviewsExpanded = !reviewsExpanded; renderReviews(); });
-    document.getElementById('resDate').addEventListener('change', () => { selectedTable = null; document.getElementById('selectedTableDisplay').value = ''; loadAvailability(); });
-    document.getElementById('resTime').addEventListener('change', () => { selectedTable = null; document.getElementById('selectedTableDisplay').value = ''; loadAvailability(); });
+    document.getElementById('resDate').addEventListener('change', () => { selectedTable = null; document.getElementById('selectedTableDisplay').value = ''; populateReservationTimes(); loadAvailability(); });
+    document.getElementById('resTime').addEventListener('change', () => { selectedTable = null; document.getElementById('selectedTableDisplay').value = ''; updateEndTimeDisplay(); loadAvailability(); });
 
     document.getElementById('reservationForm').addEventListener('submit', async function(e) {
       e.preventDefault(); if (!selectedTable) { alert('Najprv vyberte voľný stôl z pôdorysu.'); return; }
       const btn = document.getElementById('reserveBtn'); btn.disabled = true; btn.textContent = 'Odosielam rezerváciu...';
-      const payload = { type: 'reservation', date: document.getElementById('resDate').value, time: document.getElementById('resTime').value, table: selectedTable, area: selectedArea, name: document.getElementById('resName').value, phone: document.getElementById('resPhone').value, people: document.getElementById('resPeople').value, note: document.getElementById('resNote').value };
+      const payload = { type: 'reservation', date: document.getElementById('resDate').value, time: document.getElementById('resTime').value, table: selectedTable, area: selectedArea, name: document.getElementById('resName').value, phone: document.getElementById('resPhone').value, people: document.getElementById('resPeople').value, note: document.getElementById('resNote').value, endTime: getReservationEndTime(document.getElementById('resTime').value) };
       try { await fetch(scriptUrl, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); document.getElementById('reservationSuccess').style.display = 'block'; document.getElementById('reservationSuccess').textContent = 'Rezervácia bola odoslaná. Tešíme sa na vašu návštevu.'; this.reset(); selectedTable = null; selectedArea = null; setTimeout(loadAvailability, 1000); }
       catch (err) { alert('Rezerváciu sa nepodarilo odoslať. Skúste to znova.'); }
       btn.disabled = false; btn.textContent = 'Odoslať rezerváciu';
@@ -343,7 +407,7 @@
     });
 
     function initScrollAnimations() { const elements = document.querySelectorAll('.fade-up'); const observer = new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: .12 }); elements.forEach(el => observer.observe(el)); }
-    document.addEventListener('DOMContentLoaded', () => { const today = new Date().toISOString().split('T')[0]; document.getElementById('resDate').value = today; initScrollAnimations(); loadWebsiteData(); });
+    document.addEventListener('DOMContentLoaded', () => { const today = new Date().toISOString().split('T')[0]; document.getElementById('resDate').value = today; populateReservationTimes(); initScrollAnimations(); loadWebsiteData(); });
   </script>
 </body>
 </html>
