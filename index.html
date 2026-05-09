@@ -203,6 +203,7 @@
               <div><label>Čas príchodu</label><select id="resTime" required></select></div>
             </div>
             <div class="form-grid" style="margin-top:14px;"><div><label>Meno</label><input type="text" id="resName" placeholder="Meno a priezvisko" required></div><div><label>Telefón</label><input type="tel" id="resPhone" placeholder="+421 ..." required></div></div>
+            <div style="margin-top:14px;"><label>Email</label><input type="email" id="resEmail" placeholder="vas@email.sk" required></div>
             <div class="form-grid" style="margin-top:14px;"><div><label>Počet osôb</label><input type="number" id="resPeople" min="1" max="12" value="2" required></div><div><label>Vybraný stôl</label><input type="text" id="selectedTableDisplay" placeholder="Klikni na stôl" readonly required></div>
               <div><label>Rezervácia do</label><input type="text" id="resEndTimeDisplay" placeholder="Automaticky" readonly></div></div>
             <div style="margin-top:14px;"><label>Poznámka</label><textarea id="resNote" placeholder="Napr. kočík, narodeniny, preferencia pri okne..."></textarea></div>
@@ -426,8 +427,8 @@
     document.getElementById('reservationForm').addEventListener('submit', async function(e) {
       e.preventDefault(); if (!selectedTable) { alert('Najprv vyberte voľný stôl z pôdorysu.'); return; }
       const btn = document.getElementById('reserveBtn'); btn.disabled = true; btn.textContent = 'Odosielam rezerváciu...';
-      const payload = { type: 'reservation', date: document.getElementById('resDate').value, time: document.getElementById('resTime').value, table: selectedTable, area: selectedArea, name: document.getElementById('resName').value, phone: document.getElementById('resPhone').value, people: document.getElementById('resPeople').value, note: document.getElementById('resNote').value, endTime: getReservationEndTime(document.getElementById('resTime').value) };
-      try { await fetch(scriptUrl, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); document.getElementById('reservationSuccess').style.display = 'block'; document.getElementById('reservationSuccess').textContent = 'Rezervácia bola odoslaná. Tešíme sa na vašu návštevu.'; document.getElementById('resName').value = ''; document.getElementById('resPhone').value = ''; document.getElementById('resPeople').value = '2'; document.getElementById('resNote').value = ''; selectedTable = null; selectedArea = null; document.getElementById('selectedTableDisplay').value = ''; setTimeout(loadAvailability, 1800); }
+      const payload = { type: 'reservation', date: document.getElementById('resDate').value, time: document.getElementById('resTime').value, table: selectedTable, area: selectedArea, name: document.getElementById('resName').value, phone: document.getElementById('resPhone').value, email: document.getElementById('resEmail').value, people: document.getElementById('resPeople').value, note: document.getElementById('resNote').value, endTime: getReservationEndTime(document.getElementById('resTime').value) };
+      try { await fetch(scriptUrl, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); document.getElementById('reservationSuccess').style.display = 'block'; document.getElementById('reservationSuccess').textContent = 'Rezervácia bola odoslaná. Tešíme sa na vašu návštevu.'; document.getElementById('resName').value = ''; document.getElementById('resPhone').value = ''; document.getElementById('resEmail').value = ''; document.getElementById('resPeople').value = '2'; document.getElementById('resNote').value = ''; selectedTable = null; selectedArea = null; document.getElementById('selectedTableDisplay').value = ''; setTimeout(loadAvailability, 1800); }
       catch (err) { alert('Rezerváciu sa nepodarilo odoslať. Skúste to znova.'); }
       btn.disabled = false; btn.textContent = 'Odoslať rezerváciu';
     });
@@ -449,6 +450,7 @@
   </script>
 </body>
 </html>
+
 
 
 
