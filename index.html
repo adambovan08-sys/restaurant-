@@ -552,71 +552,50 @@
     .split-image {
       min-height: 420px;
       position: relative;
-      background:
-        radial-gradient(circle at 35% 35%, rgba(247,200,115,0.16), transparent 28%),
-        linear-gradient(135deg, #0a0705, #1a1008);
-      display: grid;
-      place-items: center;
+      background: #050403;
       overflow: hidden;
     }
 
-    .burger-art {
-      position: relative;
-      width: min(430px, 84%);
-      height: 290px;
-      filter: drop-shadow(0 35px 42px rgba(0,0,0,0.48));
+    .burger-video {
+      width: 100%;
+      height: 100%;
+      min-height: 420px;
+      object-fit: cover;
+      display: block;
+      opacity: 0.88;
+      filter: contrast(1.05) saturate(1.08) brightness(0.82);
+      transition: 0.4s ease;
     }
 
-    .bun-top {
-      position: absolute;
-      left: 40px;
-      right: 40px;
-      top: 35px;
-      height: 80px;
-      border-radius: 90px 90px 28px 28px;
-      background: radial-gradient(circle at 34% 25%, #fff1bd 0 5%, transparent 6%), linear-gradient(180deg, #c97924, #7c3d13);
-      box-shadow: inset 0 10px 18px rgba(255,255,255,0.16);
+    .split:hover .burger-video {
+      transform: scale(1.03);
+      opacity: 1;
     }
 
-    .cheese {
+    .video-overlay {
       position: absolute;
-      left: 30px;
-      right: 30px;
-      top: 130px;
-      height: 34px;
-      background: #f3c76a;
-      clip-path: polygon(0 0, 100% 0, 93% 100%, 76% 40%, 56% 100%, 38% 45%, 20% 100%, 0 60%);
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(3,3,2,0.68), transparent 45%),
+        linear-gradient(180deg, transparent 50%, rgba(3,3,2,0.74));
+      pointer-events: none;
     }
 
-    .meat {
+    .video-badge {
       position: absolute;
-      left: 20px;
-      right: 20px;
-      top: 110px;
-      height: 52px;
-      border-radius: 999px;
-      background: linear-gradient(180deg, #3a1d10, #160a05);
-      box-shadow: inset 0 8px 16px rgba(255,255,255,0.07);
-    }
-
-    .lettuce {
-      position: absolute;
-      left: 35px;
-      right: 35px;
-      top: 166px;
-      height: 26px;
-      background: linear-gradient(90deg, #31511e, #7ca64b, #31511e);
-      border-radius: 40px;
-    }
-
-    .bun-bottom {
-      position: absolute;
-      left: 45px;
-      right: 45px;
-      top: 190px;
-      height: 58px;
-      border-radius: 22px 22px 55px 55px;
-      background: linear-gradient(180deg, #a85e21, #6f3511);
+      left: 28px;
+      bottom: 28px;
+      z-index: 3;
+      border: 1px solid rgba(214,164,75,0.45);
+      background: rgba(3,3,2,0.55);
+      backdrop-filter: blur(10px);
+      color: #f3c76a;
+      padding: 14px 18px;
+      border-radius: 6px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 900;
     }
 
     .split-content { padding: 50px; }
@@ -960,13 +939,11 @@
     <section id="menu">
       <div class="split fade-up">
         <div class="split-image">
-          <div class="burger-art">
-            <div class="bun-top"></div>
-            <div class="meat"></div>
-            <div class="cheese"></div>
-            <div class="lettuce"></div>
-            <div class="bun-bottom"></div>
-          </div>
+          <video class="burger-video" autoplay muted loop playsinline>
+            <source src="videos/hero-video.mp4" type="video/mp4">
+          </video>
+          <div class="video-overlay"></div>
+          <div class="video-badge">Premium atmosféra · Predná Hora</div>
         </div>
         <div class="split-content">
           <div class="section-kicker">Poctivé suroviny</div>
@@ -1089,5 +1066,6 @@
   </script>
 </body>
 </html>
+
 
 
