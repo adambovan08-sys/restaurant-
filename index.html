@@ -369,9 +369,12 @@
     }
 
     async function loadAvailability() {
-      const date = document.getElementById('resDate').value; const time = document.getElementById('resTime').value; updateEndTimeDisplay();
+      const date = document.getElementById('resDate').value;
+      const time = document.getElementById('resTime').value;
+      updateEndTimeDisplay();
+      const endTime = getReservationEndTime(time);
       if (!date || !time) { renderTables(allTables.length ? allTables : generateFallbackTables()); return; }
-      try { const response = await fetch(`${scriptUrl}?action=availability&date=${encodeURIComponent(date)}&time=${encodeURIComponent(time)}&v=${Date.now()}`); const data = await response.json(); allTables = data.tables && data.tables.length ? data.tables : allTables; renderTables(allTables); }
+      try { const response = await fetch(`${scriptUrl}?action=availability&date=${encodeURIComponent(date)}&time=${encodeURIComponent(time)}&endTime=${encodeURIComponent(endTime)}&v=${Date.now()}`); const data = await response.json(); allTables = data.tables && data.tables.length ? data.tables : allTables; renderTables(allTables); }
       catch (e) { renderTables(allTables); }
     }
 
@@ -394,7 +397,7 @@
       e.preventDefault(); if (!selectedTable) { alert('Najprv vyberte voľný stôl z pôdorysu.'); return; }
       const btn = document.getElementById('reserveBtn'); btn.disabled = true; btn.textContent = 'Odosielam rezerváciu...';
       const payload = { type: 'reservation', date: document.getElementById('resDate').value, time: document.getElementById('resTime').value, table: selectedTable, area: selectedArea, name: document.getElementById('resName').value, phone: document.getElementById('resPhone').value, people: document.getElementById('resPeople').value, note: document.getElementById('resNote').value, endTime: getReservationEndTime(document.getElementById('resTime').value) };
-      try { await fetch(scriptUrl, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); document.getElementById('reservationSuccess').style.display = 'block'; document.getElementById('reservationSuccess').textContent = 'Rezervácia bola odoslaná. Tešíme sa na vašu návštevu.'; this.reset(); selectedTable = null; selectedArea = null; setTimeout(loadAvailability, 1000); }
+      try { await fetch(scriptUrl, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); document.getElementById('reservationSuccess').style.display = 'block'; document.getElementById('reservationSuccess').textContent = 'Rezervácia bola odoslaná. Tešíme sa na vašu návštevu.'; this.reset(); const today = new Date().toISOString().split('T')[0]; document.getElementById('resDate').value = today; populateReservationTimes(); selectedTable = null; selectedArea = null; document.getElementById('selectedTableDisplay').value = ''; setTimeout(loadAvailability, 1000); }
       catch (err) { alert('Rezerváciu sa nepodarilo odoslať. Skúste to znova.'); }
       btn.disabled = false; btn.textContent = 'Odoslať rezerváciu';
     });
@@ -407,7 +410,15 @@
     });
 
     function initScrollAnimations() { const elements = document.querySelectorAll('.fade-up'); const observer = new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: .12 }); elements.forEach(el => observer.observe(el)); }
-    document.addEventListener('DOMContentLoaded', () => { const today = new Date().toISOString().split('T')[0]; document.getElementById('resDate').value = today; populateReservationTimes(); initScrollAnimations(); loadWebsiteData(); });
+    document.addEventListener('DOMContentLoaded', () => {
+      const today = new Date().toISOString().split('T')[0];
+      const dateInput = document.getElementById('resDate');
+      dateInput.min = today;
+      dateInput.value = today;
+      populateReservationTimes();
+      initScrollAnimations();
+      loadWebsiteData();
+    });
   </script>
 </body>
 </html>
