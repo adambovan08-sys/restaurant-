@@ -254,7 +254,7 @@
           <div class="legend"><span><i class="i-free"></i> Voľné</span><span><i class="i-busy"></i> Obsadené</span><span><i class="i-selected"></i> Vybrané</span></div>
           <div class="notice">Rezerváciu vám potvrdíme e-mailom. Ak sa vaše plány zmenia, rezerváciu môžete jednoducho zrušiť cez odkaz v potvrdení.</div>
         </div>
-        <div class="floorplan fade-up"><div class="terrace-bg"></div><div class="area-label interior">Interiér</div><div class="floor-divider"></div><div class="area-label terrace">Terasa</div><div id="tablesLayer"></div></div>
+        <div class="floorplan fade-up" id="floorplan"><div class="terrace-bg"></div><div class="area-label interior">Interiér</div><div class="floor-divider"></div><div class="area-label terrace">Terasa</div><div id="tablesLayer"></div></div>
       </div>
     </section>
 
@@ -475,6 +475,14 @@
     }
 
     document.getElementById('toggleReviewsBtn').addEventListener('click', () => { reviewsExpanded = !reviewsExpanded; renderReviews(); });
+
+    document.getElementById('selectedTableDisplay').addEventListener('click', () => {
+      document.getElementById('floorplan').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    document.getElementById('selectedTableDisplay').addEventListener('focus', () => {
+      document.getElementById('floorplan').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
     document.getElementById('resDate').addEventListener('change', () => { selectedTable = null; document.getElementById('selectedTableDisplay').value = ''; populateReservationTimes(); loadAvailability(); });
     document.getElementById('resTime').addEventListener('change', () => { selectedTable = null; document.getElementById('selectedTableDisplay').value = ''; updateEndTimeDisplay(); loadAvailability(); });
 
